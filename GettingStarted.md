@@ -1,0 +1,1 @@
+This page is no longer maintained here, please check out the [IvyIDEA confluence pages at JetBrains](http://www.jetbrains.net/confluence/display/CONTEST/IvyIDEA)
