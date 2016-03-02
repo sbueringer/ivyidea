@@ -46,13 +46,15 @@ public class OrderedFileList {
     private JButton btnDown;
     private JButton btnAdd;
     private JList lstFileNames;
+    private JButton btnAddFileFromTextFieldButton;
+    private JTextField textFieldFree;
     private boolean modified;
 
     public OrderedFileList(Project project) {
         this.project = project;
 
         wireFileList();
-        wireAddButton();
+        wireAddButtons();
         wireRemoveButton();
         wireMoveUpButton();
         wireMoveDownButton();
@@ -130,7 +132,7 @@ public class OrderedFileList {
         return size > 1 && selectedIndex >= 0 && selectedIndex < size - 1;
     }
 
-    private void wireAddButton() {
+    private void wireAddButtons() {
         btnAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 final FileChooserDescriptor fcDescriptor = FileChooserDescriptorFactory.createMultipleFilesNoJarsDescriptor();
@@ -139,6 +141,12 @@ public class OrderedFileList {
                 for (VirtualFile file : files) {
                     addFilenameToList(file.getPresentableUrl());
                 }
+            }
+        });
+        btnAddFileFromTextFieldButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                addFilenameToList(textFieldFree.getText());
+                textFieldFree.setText("");
             }
         });
     }
@@ -174,6 +182,7 @@ public class OrderedFileList {
 
     private void removeSelectedItemFromList() {
         final int selectedIndex = lstFileNames.getSelectedIndex();
+        textFieldFree.setText(getFileListModel().getItemAt(selectedIndex));
         getFileListModel().removeItemAt(selectedIndex);
         updateListSelection(selectedIndex);
         modified = true;

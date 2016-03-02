@@ -19,6 +19,8 @@ package org.clarent.ivyidea.config;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.net.HttpConfigurable;
 import org.apache.ivy.core.resolve.ResolveOptions;
 import org.apache.ivy.core.settings.IvySettings;
@@ -53,6 +55,7 @@ import java.util.*;
 public class IvyIdeaConfigHelper {
 
     private static final String RESOLVED_LIB_NAME_ROOT = "IvyIDEA";
+    public static final String $_MODULE_DIR_$ = "$MODULE_DIR$";
 
     public static String getCreatedLibraryName(final ModifiableRootModel model, final String configName) {
         final Project project = model.getProject();
@@ -218,6 +221,21 @@ public class IvyIdeaConfigHelper {
         final Properties properties = new Properties();
         for (String propertiesFile : CollectionUtils.createReversedList(propertiesFiles)) {
             if (propertiesFile != null) {
+                if(propertiesFile.startsWith($_MODULE_DIR_$)){
+                    VirtualFile modulePathFile = ModuleRootManager.getInstance(module).getContentRoots()[0];
+                    String propertiesFileWithoutModuleDir = propertiesFile.replace($_MODULE_DIR_$,"");
+                    while (propertiesFileWithoutModuleDir.startsWith("/..") || propertiesFileWithoutModuleDir.startsWith("\\..")){
+                        if(propertiesFileWithoutModuleDir.startsWith("/..")){
+                            propertiesFileWithoutModuleDir = propertiesFileWithoutModuleDir.replace("/..","");
+                        }
+                        else {
+                            propertiesFileWithoutModuleDir = propertiesFileWithoutModuleDir.replace("\\..","");
+                        }
+                        modulePathFile = modulePathFile.getParent();
+                    }
+                    propertiesFile = modulePathFile.getPath() + propertiesFileWithoutModuleDir;
+
+                }
                 File result = new File(propertiesFile);
                 if (!result.exists()) {
                     throw new IvySettingsNotFoundException("The ivy properties file given in the module settings for module " + module.getName() + " does not exist: " + result.getAbsolutePath(), IvySettingsNotFoundException.ConfigLocation.Module, module.getName());
