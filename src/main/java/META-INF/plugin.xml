@@ -4,7 +4,7 @@
     <description><![CDATA[Resolves module dependencies through Ivy
         <p>Features:
             <ul>
-                <li>Apache Ivy integration (up to v2.4.0-rc1); no need for external ant build scripts to be called</li>
+                <li>Apache Ivy integration (up to v2.4.0); no need for external ant build scripts to be called</li>
                 <li>Automatic ivy configuration of modules using facets (for modules containing an ivy.xml file)</li>
                 <li>Detection of dependencies that are really other intellij modules in the same project; these are added as module references</li>
                 <li>Detect source/document/jar type ivy artifacts in dependencies and add them as such to the module</li>
@@ -16,6 +16,15 @@
     </description>
     <change-notes><![CDATA[
         <p>
+            <strong>1.0.14</strong>
+            <ul>
+                <li>When trying to resolve dependencies without an Ivy settings file, an IllegalArgumentException
+				    was thrown when clicking on the 'Open Project Settings' link</li>
+            </ul>
+            <strong>1.0.13</strong>
+            <ul>
+                <li>The IvyIDEA settings window was no longer visible in IntelliJ 2016.1</li>
+            </ul>
             <strong>1.0.12</strong>
             <ul>
                 <li>The configurations to resolve are now stored alphabetically in the .iml file</li>
@@ -109,7 +118,7 @@
             </ul>
         </p>]]>
     </change-notes>
-    <version>1.0.12</version>
+    <version>1.0.14</version>
     <vendor email="guy.mahieu@gmail.com" url="http://www.clarent.org" logo="/ivyidea16.png">Guy Mahieu</vendor>
     <idea-version since-build="3000"/>
     <application-components>
@@ -119,7 +128,7 @@
     </application-components>
     <project-components>
         <component>
-            <implementation-class>org.clarent.ivyidea.intellij.ui.IvyIdeaProjectSettingsComponent</implementation-class>
+            <implementation-class>org.clarent.ivyidea.intellij.IvyIdeaProjectComponent</implementation-class>
         </component>
         <component>
             <implementation-class>org.clarent.ivyidea.intellij.ToolWindowRegistrationComponent</implementation-class>
@@ -150,5 +159,8 @@
     <extensions defaultExtensionNs="com.intellij">
         <facetType implementation="org.clarent.ivyidea.intellij.facet.IvyIdeaFacetType"/>
         <framework.detector implementation="org.clarent.ivyidea.intellij.facet.IvyIdeaFacetDetector"/>
+		<projectConfigurable id="IvyIDEA.ProjectSettings"
+							 instance="org.clarent.ivyidea.intellij.ui.IvyIdeaProjectSettingsComponent"
+							 displayName="IvyIDEA" />
     </extensions>
 </idea-plugin>

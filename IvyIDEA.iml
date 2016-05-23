@@ -22,7 +22,9 @@
           <root url="jar://$MODULE_DIR$/lib/ivy-2.4.0.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/lib/ivy-2.4.0-sources.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library" scope="RUNTIME">
@@ -68,4 +70,3 @@
     </Base>
   </component>
 </module>
-
